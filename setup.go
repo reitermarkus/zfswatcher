@@ -252,8 +252,8 @@ func getCfg() *cfgType {
 	c.Main.Zpoolstatusrefresh = 10
 	c.Main.Zpoolstatuscmd = "zpool status"
 	c.Main.Zfslistrefresh = 60
-	c.Main.Zfslistcmd = "zfs list -H -o name,avail,used,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint -d 0"
-	c.Main.Zfslistusagecmd = "zfs list -H -o name,avail,used,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint -r -t all"
+	c.Main.Zfslistcmd = "zfs list -H -o name,avail,used,logicalused,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint,compressratio -d 0"
+	c.Main.Zfslistusagecmd = "zfs list -H -o name,avail,used,logicalused,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint,compressratio -r -t all"
 	c.Leds.Ledctlcmd = "ledctl"
 	c.Severity.Pooladded = notifier.INFO
 	c.Severity.Poolremoved = notifier.INFO

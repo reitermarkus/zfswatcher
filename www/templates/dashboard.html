@@ -18,7 +18,9 @@
 				<th style="text-align: right; width: 8%">Avail</th>
 				<th style="text-align: right; width: 5%">%</th>
 				<th style="width: 15%"></th>
-				<th style="width: 31%"></th>
+				<th style="text-align: right; width: 8%">Logical Used</th>
+				<th style="text-align: right; width: 12%">Compression Ratio</th>
+				<th style="width: 14%"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,6 +43,8 @@
 					</div>
 					</a>
 				</td>
+				<td style="text-align: right">{{ nicenumber .Logicalused }}</td>
+				<td style="text-align: right">{{ .Compressratio }}</td>
 				<td></td>
 			</tr>
 			{{ end }}
