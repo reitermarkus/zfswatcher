@@ -18,4 +18,4 @@ jobs:
       run: make clean
       run: make
       
-
+runs-on: self-hosted
