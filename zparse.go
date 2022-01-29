@@ -31,15 +31,17 @@ import (
 
 // ZFS pool disk usage.
 type PoolUsageType struct {
-	Name          string
-	Avail         int64
-	Used          int64
-	Usedsnap      int64
-	Usedds        int64
-	Usedrefreserv int64
-	Usedchild     int64
-	Refer         int64
-	Mountpoint    string
+	Name           string
+	Avail          int64
+	Used           int64
+	Usedsnap       int64
+	Usedds         int64
+	Usedrefreserv  int64
+	Usedchild      int64
+	Refer          int64
+	Mountpoint     string
+	Logicalused    int64
+	Compressratio  string
 }
 
 // Methods for calculating the percentage to make sure that the calculation
@@ -52,7 +54,7 @@ func (u *PoolUsageType) GetAvailPercent() int {
 	return int(float64(u.Avail)*100/float64(u.Avail+u.Used) + 0.5)
 }
 
-// Parse "zfs list -H -o name,avail,used,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint" command output.
+// Parse "zfs list -H -o name,avail,used,logicalused,usedsnap,usedds,usedrefreserv,usedchild,refer,mountpoint,compressratio" command output.
 func parseZfsList(str string) map[string]*PoolUsageType {
 	usagemap := make(map[string]*PoolUsageType)
 	for lineno, line := range strings.Split(str, "\n") {
@@ -60,22 +62,24 @@ func parseZfsList(str string) map[string]*PoolUsageType {
 			continue
 		}
 		f := strings.Split(line, "\t")
-		if len(f) != 9 {
+		if len(f) != 11 {
 			notify.Printf(notifier.CRIT, "invalid line %d in ZFS usage output: %s",
 				lineno+1, line)
 			notify.Attach(notifier.CRIT, str)
 			continue
 		}
 		usagemap[f[0]] = &PoolUsageType{
-			Name:          f[0],
-			Avail:         unniceNumber(f[1]),
-			Used:          unniceNumber(f[2]),
-			Usedsnap:      unniceNumber(f[3]),
-			Usedds:        unniceNumber(f[4]),
-			Usedrefreserv: unniceNumber(f[5]),
-			Usedchild:     unniceNumber(f[6]),
-			Refer:         unniceNumber(f[7]),
-			Mountpoint:    f[8],
+			Name:           f[0],
+			Avail:          unniceNumber(f[1]),
+			Used:           unniceNumber(f[2]),
+			Logicalused:    unniceNumber(f[3]),
+			Usedsnap:       unniceNumber(f[4]),
+			Usedds:         unniceNumber(f[5]),
+			Usedrefreserv:  unniceNumber(f[6]),
+			Usedchild:      unniceNumber(f[7]),
+			Refer:          unniceNumber(f[8]),
+			Mountpoint:     f[9],
+			Compressratio:  f[10],
 		}
 	}
 	return usagemap

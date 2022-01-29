@@ -94,23 +94,25 @@ type devStatusWeb struct {
 }
 
 type poolStatusWeb struct {
-	N            int
-	Name         string
-	State        string
-	StateClass   string
-	Status       string
-	Action       string
-	See          string
-	Scan         string
-	Devs         []devStatusWeb
-	Errors       string
-	Used         int64
-	UsedPercent  int
-	UsedClass    string
-	Avail        int64
-	AvailPercent int
-	Total        int64
-	Root         string
+	N             int
+	Name          string
+	State         string
+	StateClass    string
+	Status        string
+	Action        string
+	See           string
+	Scan          string
+	Devs          []devStatusWeb
+	Errors        string
+	Used          int64
+	Logicalused   int64
+	UsedPercent   int
+	UsedClass     string
+	Avail         int64
+	AvailPercent  int
+	Total         int64
+	Root          string
+	Compressratio string
 }
 
 type chassisStatusWeb struct {
@@ -203,10 +205,13 @@ func makePoolStatusWeb(pool *PoolType, usage map[string]*PoolUsageType) *poolSta
 	statusWeb.Avail = -1
 	statusWeb.Used = -1
 	statusWeb.Total = -1
+	statusWeb.Logicalused = -1
 	if u, ok := usage[pool.name]; ok {
 		statusWeb.Avail = u.Avail
 		statusWeb.AvailPercent = u.GetAvailPercent()
 		statusWeb.Used = u.Used
+		statusWeb.Logicalused = u.Logicalused
+		statusWeb.Compressratio = u.Compressratio
 		usedPercent := u.GetUsedPercent()
 		statusWeb.UsedPercent = usedPercent
 		statusWeb.Total = u.Avail + u.Used
